@@ -33,13 +33,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 
     private javax.swing.Timer timer;
     private int delay = 8;
-
     private ArrayList<Ball> balls = new ArrayList<>();
     private int ballX = 120, ballY = 350, ballDirX = -1, ballDirY = -2;
     private int paddleX = 310;
     private int paddleWidth = 100;
     private final int paddleHeight = 10;
-
     private boolean moveLeft = false, moveRight = false;
     private BrickMap map;
     private int lives = 3;
@@ -252,7 +250,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
                     }
                 }
             }
-
 
             if (balls.isEmpty()) {
                 lives--;
