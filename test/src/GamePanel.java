@@ -1,9 +1,6 @@
 import javax.swing.JPanel;
 import javax.swing.Timer;
-import javax.swing.*;
 
-import java.awt.*;
-import java.awt.event.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -19,11 +16,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Iterator;
 import java.util.Random;
 
-import java.io.*;
 import java.util.prefs.Preferences;
 
 
@@ -94,6 +89,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
                 if (val > 0) count++;
             }
         }
+        System.out.println(count);
         return count;
     }
 
@@ -186,6 +182,24 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 
 
     }
+
+    private void nextWave() {
+        // Augmentez la difficulté en ajustant les paramètres (par exemple, augmenter la vitesse des balles)
+        delay = Math.max(5, delay - 1); // Réduire légèrement le délai pour accélérer la vitesse globale
+        timer.setDelay(delay);
+
+        // Réinitialiser les paramètres de la carte et des briques
+        map = new BrickMap(8, 14); // Peut être ajusté pour changer la taille ou la disposition des vagues
+        totalBricks = countInitialBricks(); // Recompte les briques pour la nouvelle vague
+
+        // Optionnel : ajuster les positions initiales des balles
+        balls.clear(); // Supprimez toutes les balles actuelles
+        resetBall();   // Ajoutez une nouvelle balle initiale
+
+        // Ajout d'un message pour indiquer le début de la nouvelle vague (optionnel)
+        System.out.println("Nouvelle vague générée ! Difficulté augmentée.");
+    }
+
         @Override
         public void actionPerformed(ActionEvent e) {
         if (gameState == GameState.PLAYING) {
@@ -286,6 +300,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 
             if (moveRight && paddleX < 700 - paddleWidth) paddleX += 5;
             if (moveLeft && paddleX > 10) paddleX -= 5;
+            if (countInitialBricks() == 0) {
+                System.out.println("Toutes les briques sont cassées ! Début d'une nouvelle vague.");
+                nextWave(); // Appelez une méthode pour générer la nouvelle vague
+            }
+
         }
         repaint();
     }
