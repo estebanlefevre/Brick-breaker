@@ -40,8 +40,8 @@ public class BrickMap {
     }
 
     public void hitBrick(int row, int col) {
-        if (map[row][col] == 2) {
-            map[row][col] = 1; // solide devient normale
+        if (map[row][col] >= 2) {
+            map[row][col]--; // solide devient normale
         } else {
             map[row][col] = 0; // détruite
         }

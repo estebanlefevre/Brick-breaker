@@ -253,9 +253,14 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
                                 totalBricks--;
                                 updateBestScore(score);
 
-                                if (b.x + 19 <= brickRect.x || b.x + 1 >= brickRect.x + brickRect.width) {
+                                int ballSize = 20;
+                                Rectangle prevBallRect = new Rectangle(b.x - b.dirX, b.y - b.dirY, ballSize, ballSize);
+                                boolean fromLeft = prevBallRect.x + ballSize <= brickRect.x;
+                                boolean fromRight = prevBallRect.x >= brickRect.x + brickRect.width;
+                                if ((fromLeft && b.dirX > 0) || (fromRight && b.dirX < 0)) {
                                     b.dirX = -b.dirX;
-                                } else {
+                                } else
+                                {
                                     b.dirY = -b.dirY;
                                 }
                                 break A;
