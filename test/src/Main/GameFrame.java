@@ -1,4 +1,4 @@
-// GameFrame.java
+package Main;// Main.GameFrame.java
 import javax.swing.JFrame;
 
 public class GameFrame extends JFrame {
