@@ -89,7 +89,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
                 if (val > 0) count++;
             }
         }
-        System.out.println(count);
+        //System.out.println(count);
         return count;
     }
 
@@ -197,7 +197,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
         resetBall();   // Ajoutez une nouvelle balle initiale
 
         // Ajout d'un message pour indiquer le début de la nouvelle vague (optionnel)
-        System.out.println("Nouvelle vague générée ! Difficulté augmentée.");
+        //System.out.println("Nouvelle vague générée ! Difficulté augmentée.");
     }
 
         @Override
@@ -221,20 +221,40 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
                 if (b.x < 0 || b.x > 670) b.dirX = -b.dirX;
                 if (b.y < 0) b.dirY = -b.dirY;
                 if (b.y > 570) {
-                    System.out.println("La balle a dépassé le bas de l'écran ! Tentative de suppression...");
-                    System.out.println("Balle supprimée. Taille de la liste balls : " + balls.size());
+                    //System.out.println("La balle a dépassé le bas de l'écran ! Tentative de suppression...");
+                    //System.out.println("Balle supprimée. Taille de la liste balls : " + balls.size());
 
                     ballIterator.remove();
-                    System.out.println("Balle supprimée. Taille de la liste balls : " + balls.size());
+                    //System.out.println("Balle supprimée. Taille de la liste balls : " + balls.size());
 
 
-                    System.out.println("Balle sortie" + lives);
+                    //System.out.println("Balle sortie" + lives);
 
                     continue;
                 }
 
                 Rectangle ballRect = new Rectangle(b.x, b.y, 20, 20);
-                if (ballRect.intersects(paddleRect)) b.dirY = -b.dirY;
+                if (ballRect.intersects(paddleRect)) {
+                    Rectangle top = new Rectangle(paddleX, 550, paddleWidth, 5);
+                    Rectangle left = new Rectangle(paddleX, 550, 5, paddleHeight);
+                    Rectangle right = new Rectangle(paddleX + paddleWidth - 5, 550, 5, paddleHeight);
+
+                    if (ballRect.intersects(left)) {
+                        b.dirX = -Math.abs(b.dirX);
+                    } else if (ballRect.intersects(right)) {
+                        b.dirX = Math.abs(b.dirX);
+                    }
+
+                    if (ballRect.intersects(top)) {
+                        // Calculate smooth bounce only if hitting top
+                        double speed = Math.sqrt(b.dirX * b.dirX + b.dirY * b.dirY);
+                        double hitRatio = (b.x + 10.0 - paddleX) / paddleWidth;
+                        double angle = Math.toRadians(150 - 120 * hitRatio);
+
+                        b.dirX = (int) Math.round(speed * Math.cos(angle));
+                        b.dirY = (int) -Math.abs(Math.round(speed * Math.sin(angle)));
+                    }
+                }
 
                 A: for (int i = 0; i < map.map.length; i++) {
                     for (int j = 0; j < map.map[0].length; j++) {
@@ -306,7 +326,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
             if (moveRight && paddleX < 700 - paddleWidth) paddleX += 5;
             if (moveLeft && paddleX > 10) paddleX -= 5;
             if (countInitialBricks() == 0) {
-                System.out.println("Toutes les briques sont cassées ! Début d'une nouvelle vague.");
+                //System.out.println("Toutes les briques sont cassées ! Début d'une nouvelle vague.");
                 nextWave(); // Appelez une méthode pour générer la nouvelle vague
             }
 
