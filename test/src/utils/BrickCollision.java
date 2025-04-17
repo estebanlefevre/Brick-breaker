@@ -10,13 +10,11 @@ public class BrickCollision {
 
     private final BricksManager map;
     private final List<Ball> balls;
-    private final List<Bonus> bonuses;
     private final Random rand;
 
-    public BrickCollision(BricksManager map, List<Ball> balls, List<Bonus> bonuses) {
+    public BrickCollision(BricksManager map, List<Ball> balls) {
         this.map = map;
         this.balls = balls;
-        this.bonuses = bonuses;
         this.rand = new Random();
     }
 
