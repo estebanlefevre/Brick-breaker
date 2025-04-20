@@ -48,7 +48,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
     private class Bonus {
         int x, y;
         int width = 20, height = 20;
-        int type; // 1 = extra ball, 2 = shrink, 3 = enlarge
+        int type;
         public Bonus(int x, int y, int type) {
             this.x = x;
             this.y = y;
@@ -98,23 +98,30 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 
         if (gameState == GameState.MENU) {
             g.setColor(Color.white);
+
             g.setFont(new Font("Arial", Font.BOLD, 36));
-            g.drawString("Brick Breaker", 240, 200);
+            int titleX = getWidth() / 2 - 120;
+            g.drawString("Brick Breaker", titleX, 200);
+
             g.setFont(new Font("Arial", Font.PLAIN, 24));
-            g.drawRect(270, 300, 160, 40);
-            g.drawString("Démarrer", 295, 330);
-        } else if (gameState == GameState.PLAYING || gameState == GameState.PAUSED) {
+            int buttonWidth = 160;
+            int buttonX = getWidth() / 2 - buttonWidth / 2;
+            g.drawRect(buttonX, 300, buttonWidth, 40);
+            int startTextX = buttonX + (buttonWidth / 2) - 50;
+            g.drawString("Démarrer", startTextX, 328);
+        }
+        else if (gameState == GameState.PLAYING || gameState == GameState.PAUSED) {
             g.setColor(Color.black);
             g.fillRect(1, 1, 692, 592);
 
             map.draw((Graphics2D) g);
             g.setColor(Color.white);
             g.setFont(new Font("serif", Font.BOLD, 25));
-            g.drawString("Score: " + score, 0, 30);
-            g.drawString("Bestscore: " + bestScore, 0, 60);
+            g.drawString("Score: " + score, 10, 60);
+            g.drawString("Bestscore: " + bestScore, 10, 90);
             g.setColor(Color.PINK);
             g.setFont(new Font("Arial", Font.BOLD, 20));
-            g.drawString("Vies : " + lives, WIDTH / 2 - 50, 30);
+            g.drawString("Vies: " + lives, 10, 30);
 
 
             g.setColor(Color.green);
@@ -135,9 +142,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
             }
 
             g.setColor(Color.gray);
-            g.fillRect(640, 10, 50, 30);
+            g.fillRect(620, 10, 75, 30);
             g.setColor(Color.white);
-            g.drawString("Pause", 645, 32);
+            g.drawString("Pause", 629, 32);
 
             if (gameState == GameState.PAUSED) {
                 g.setColor(new Color(0, 0, 0, 180));
@@ -146,16 +153,16 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
                 g.setFont(new Font("Arial", Font.BOLD, 30));
                 g.drawString("Pause", 300, 200);
                 g.drawRect(250, 270, 200, 40);
-                g.drawString("Reprendre", 270, 300);
+                g.drawString("Reprendre", 275, 300);
                 g.drawRect(250, 330, 200, 40);
-                g.drawString("Redémarrer", 260, 360);
+                g.drawString("Redémarrer", 265, 360);
             }
         } else if (gameState == GameState.GAMEOVER) {
             g.setColor(Color.red);
             g.setFont(new Font("serif", Font.BOLD, 30));
-            g.drawString("Game Over, Score: " + score, 190, 300);
-            g.drawRect(250, 350, 200, 40);
-            g.drawString("Redémarrer", 260, 380);
+            g.drawString("Game Over, Score: " + score, 200, 240);
+            g.drawRect(250, 290, 200, 40);
+            g.drawString("Redémarrer", 275, 320);
         }
 
         g.dispose();
@@ -184,20 +191,17 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
     }
 
     private void nextWave() {
-        // Augmentez la difficulté en ajustant les paramètres (par exemple, augmenter la vitesse des balles)
-        delay = Math.max(5, delay - 1); // Réduire légèrement le délai pour accélérer la vitesse globale
+        delay = Math.max(5, delay - 1);
         timer.setDelay(delay);
 
-        // Réinitialiser les paramètres de la carte et des briques
-        map = new BrickMap(8, 14); // Peut être ajusté pour changer la taille ou la disposition des vagues
-        totalBricks = countInitialBricks(); // Recompte les briques pour la nouvelle vague
 
-        // Optionnel : ajuster les positions initiales des balles
-        balls.clear(); // Supprimez toutes les balles actuelles
-        resetBall();   // Ajoutez une nouvelle balle initiale
+        map = new BrickMap(8, 14);
+        totalBricks = countInitialBricks();
 
-        // Ajout d'un message pour indiquer le début de la nouvelle vague (optionnel)
-        System.out.println("Nouvelle vague générée ! Difficulté augmentée.");
+
+        balls.clear();
+        resetBall();
+
     }
 
         @Override
@@ -221,14 +225,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
                 if (b.x < 0 || b.x > 670) b.dirX = -b.dirX;
                 if (b.y < 0) b.dirY = -b.dirY;
                 if (b.y > 570) {
-                    System.out.println("La balle a dépassé le bas de l'écran ! Tentative de suppression...");
-                    System.out.println("Balle supprimée. Taille de la liste balls : " + balls.size());
 
                     ballIterator.remove();
-                    System.out.println("Balle supprimée. Taille de la liste balls : " + balls.size());
 
-
-                    System.out.println("Balle sortie" + lives);
 
                     continue;
                 }
@@ -306,8 +305,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
             if (moveRight && paddleX < 700 - paddleWidth) paddleX += 5;
             if (moveLeft && paddleX > 10) paddleX -= 5;
             if (countInitialBricks() == 0) {
-                System.out.println("Toutes les briques sont cassées ! Début d'une nouvelle vague.");
-                nextWave(); // Appelez une méthode pour générer la nouvelle vague
+                nextWave();
             }
 
         }
@@ -367,7 +365,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
             if (mx >= 250 && mx <= 450 && my >= 270 && my <= 310) gameState = GameState.PLAYING;
             else if (mx >= 250 && mx <= 450 && my >= 330 && my <= 370) resetGame();
         } else if (gameState == GameState.GAMEOVER) {
-            if (mx >= 250 && mx <= 450 && my >= 350 && my <= 390) resetGame();
+            if (mx >= 250 && mx <= 450 && my >= 290 && my <= 330) resetGame();
         }
     }
 

@@ -17,11 +17,11 @@ public class BrickMap {
             for (int j = 0; j < col; j++) {
                 int type = rand.nextInt(100);
                 if (type < 70) {
-                    map[i][j] = 1; // normale
+                    map[i][j] = 1;
                 } else if (type < 90) {
-                    map[i][j] = 2; // solide (2 coups)
+                    map[i][j] = 2;
                 } else {
-                    map[i][j] = 3; // spéciale (bonus/malus ou multi-balle)
+                    map[i][j] = 3;
                 }
 
                 float hue = rand.nextFloat();
@@ -41,9 +41,9 @@ public class BrickMap {
 
     public void hitBrick(int row, int col) {
         if (map[row][col] >= 2) {
-            map[row][col]--; // solide devient normale
+            map[row][col]--;
         } else {
-            map[row][col] = 0; // détruite
+            map[row][col] = 0;
         }
     }
 
