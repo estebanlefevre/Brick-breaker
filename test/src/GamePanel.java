@@ -233,6 +233,27 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
                 }
 
                 Rectangle ballRect = new Rectangle(b.x, b.y, 20, 20);
+                if (ballRect.intersects(paddleRect)) {
+                    Rectangle top = new Rectangle(paddleX, 550, paddleWidth, 5);
+                    Rectangle left = new Rectangle(paddleX, 550, 5, paddleHeight);
+                    Rectangle right = new Rectangle(paddleX + paddleWidth - 5, 550, 5, paddleHeight);
+
+                    if (ballRect.intersects(left)) {
+                        b.dirX = -Math.abs(b.dirX);
+                    } else if (ballRect.intersects(right)) {
+                        b.dirX = Math.abs(b.dirX);
+                    }
+
+                    if (ballRect.intersects(top)) {
+                        // Calculate smooth bounce only if hitting top
+                        double speed = Math.sqrt(b.dirX * b.dirX + b.dirY * b.dirY);
+                        double hitRatio = (b.x + 10.0 - paddleX) / paddleWidth;
+                        double angle = Math.toRadians(150 - 120 * hitRatio);
+
+                        b.dirX = (int) Math.round(speed * Math.cos(angle));
+                        b.dirY = (int) -Math.abs(Math.round(speed * Math.sin(angle)));
+                    }
+                }
                 if (ballRect.intersects(paddleRect)) b.dirY = -b.dirY;
 
                 A: for (int i = 0; i < map.map.length; i++) {
